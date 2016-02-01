@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+
+<!--
+    Udacity Frontend Web Dev Nano Project 5: Neighborhood Map
+    Shawn Jackson <shontek@gmail.com>
+//-->
+
+
+    <head>
+        <meta charset="utf-8">
+        <title>__designCPU__ :: Neighborhood Map
+</title>
+        <meta name="viewport" content="width=device-width">
+        
+        <!-- FONTS! -->
+        <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700" rel="stylesheet">
+        <!--        <link href='https://fonts.googleapis.com/css?family=Dosis:300' rel='stylesheet'>-->
+        <link href='https://fonts.googleapis.com/css?family=Merriweather:300italic' rel='stylesheet' type='text/css'>        
+        
+        <!-- Get some FontAwesome Icons -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+        <!-- Latest compiled and minified Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        
+        <!-- Our Styles. We import it AFTER Bootstrap CSS to override it -->
+        <link rel="stylesheet" href="css/style.css">
+                
+        <!-- Favicons and such -->
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    </head>
+
+    <body>
+        <!-- Site navigation, built with Bootstrap -->
+        <!--
+        <nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle Nav</span>
+                <span class="fa fa-bars fa-lg menu-btn"></span>
+              </button>
+              <a class="navbar-brand" href="#">__designCPU__</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="http://www.shawnj.es" target="_blank">.portfolio</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#myModal">.hello</a></li>
+                <li><button type="button" class="btn btn-primary" data-toggle="offcanvas">Toggle nav</button></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        -->
+
+        <div class="container-fluid">
+
+            <div id="panel-row" class="row row-offcanvas row-offcanvas-left active">                
+                <div id="ko-widget" class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">
+                        <p>GO FORTH! AND DRINK WINE!<button type="button" class="btn btn-default" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button></p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="input-group">
+                          <input type="text" data-bind="value: search, valueUpdate: 'afterkeydown'" class="form-control" placeholder="Filter Your Events..." aria-describedby="basic-addon1">
+                          <span class="input-group-addon" id="basic-addon1"><i class="fa fa-filter"></i></span>                        
+                        </div>        
+                    </div>
+    <!--
+                    <div class="list-group wine-event-list" data-bind="foreach: wineEvents.filter(search, 'name')">
+                      <a href="#" data-bind="click: showMarker, attr: {id: myID}" class="list-group-item">                      
+                        <span class="place" data-bind="text: name"></span>
+                        <span class="small" data-bind="text: eventStart"></span>
+                      </a>
+                    </div>
+    -->
+                    <div class="list-group wine-event-list">
+                    <!-- ko foreach: wineEvents.filter(search, 'name') -->
+                      <a href="#" data-bind="click: $data.showMarker, attr: {id: $data.myID}" class="list-group-item">                      
+                        <span class="place" data-bind="text: $data.name"></span>
+                        <span class="small ev-day" data-bind="text: $data.eventDay"></span>
+                        <span class="small ev-date" data-bind="text: $data.eventDate"></span>
+                        <span class="small ev-time" data-bind="text: $data.eventTime"></span>
+                      </a>
+                    <!-- /ko -->
+                      <a href="#" class="list-group-item no-events no-show" data-bind="css: { 'no-show': eventListLength() != 0 }">
+                        <span class="no-events-text">No events labeled </span><span class="no-events-search" data-bind="text: search"></span>
+                      </a>
+                    </div>
+                </div>                
+            </div>
+
+
+            <div id="show-hide-btn-cont" class="row row-offcanvas row-offcanvas-left inactive">                
+                <div id="show-hide-panel" class="panel panel-default panel-toggle">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">
+                        <p><button type="button" class="btn btn-default" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button></p>
+                    </div>
+                </div>                
+            </div>            
+            
+            
+            <div id="map-wrapper" class="row map-row">
+                <div id="map-div">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 'Contact' modal popup, built with Bootstrap!!! -->
+        <div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Send Me A Message</h4>
+              </div>
+              <div class="modal-body">
+                <div class="modal-body">
+                    <form class="contact" name="contact">
+                        <label class="label modal-label" for="name">Your Name</label><br>
+                        <input type="text" name="name" class="input-xlarge"><br>
+                        <label class="label modal-label" for="email">Your E-mail</label><br>
+                        <input type="email" name="email" class="input-xlarge"><br>
+                        <label class="label modal-label" for="message">Message</label><br>
+                        <textarea name="message" class="input-xlarge"></textarea>
+                    </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Send</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- O Hai JQuery! -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+        <!-- Import the KnockoutJS magic -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+
+        <!-- Latest compiled and minified Bootstrap JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        
+        <!-- Parse, validate, manipulate, and display dates in JavaScript. -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js"></script>
+        
+        <!-- We'll apply some custom styling to our Google Map -->
+        <script src="js/googleMapStyles.js"></script>
+
+        <!-- Add Google Maps functionality to this site -->
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+
+        <!-- Our functions that make use of KnockoutJS library -->
+        <script src="js/kofun.js"></script>
+
+        <!-- Our functions that make use of EventBrite API -->
+        <script src="js/ebfun.js"></script>
+
+        <!-- Our functions that make use of Google Maps API -->
+        <script src="js/mapfun.js"></script>
+        
+        <!-- Main controller for this whole application -->
+        <script src="js/main.js"></script>
+
+    </body>
+</html>
