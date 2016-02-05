@@ -1,12 +1,17 @@
+/*
+
+    CSS Styles for retrieving EventBrite events
+
+    Udacity Frontend Web Dev Nano Project 5: Neighborhood Map
+    Shawn Jackson <hello@shawnj.es>
+
+ */
+
 body,
 div,
 ul,
 li,
 p,
-h1,
-h2,
-h3,
-h4,
 h5,
 h6 {
   padding: 0;
@@ -20,9 +25,11 @@ h6 {
 */
 html, body, .container-fluid, .map-row, #map-div, #main {
     height: 100%;
-    background-color: #fafafa;
 }
 
+html {
+    background-color: #870735;
+}
 
 #map {
 	width:100%;
@@ -35,143 +42,21 @@ html, body, .container-fluid, .map-row, #map-div, #main {
 }
 
 body {
-  -webkit-animation: fadein 1s;
-  -moz-animation: fadein 1s;
-  -ms-animation: fadein 1s;
-  -o-animation: fadein 1s;
-  animation: fadein 1s;
+    -webkit-transition: opacity 500ms ease-out;
+    transition: opacity 500ms ease-out;
 }
 
-@keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+/* Body element will be initially transparent. We'll fade
+   everything in after content is loaded and formatted
+ */
+.invisible {
+    opacity: 0;
 }
-
-/* Firefox < 16 */
-@-moz-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-/* Internet Explorer */
-@-ms-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-/* Opera < 12.1 */
-@-o-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-.clear-fix {
-  overflow: auto;
-}
-
-h1 {
-  font-size: 36px;
-  color: #efefef;
-  line-height: 48px;
-  display: inline;
-}
-
-h2 {
-  font-weight: 600;
-  font-size: 24px;
-  color: #656565;
-  line-height: 29px;
-  padding: 10px;
-}
-
-h3 {
-  /*font-style: italic;*/
-  font-size: 18px;
-  color: #000;
-  line-height: 20px;
-  padding-bottom: 4px;
-}
-
-h4 {
-  font-weight: bold;
-  font-size: 14px;
-  color: #4a4a4a;
-  line-height: 17px;
-}
-
-/*
-h2,
-h3,
-h4,
-h5 {
-  padding: 10px 5%;
-
-}
-*/
-
-hr {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-/*p {
-  font-size: 14px;
-  color: #333;
-  line-height: 21px;
-}*/
 
 a {
   color: #1199c3;
   text-decoration: none;
   display: block;
-  /*margin-top: 10px;*/
-}
-
-/*
-.label-accent {
-    color: #367bdd;
-}
-
-.white-text {
-  color: #fff;
-  font-weight: 300;
-}
-
-.gray {
-  background-color: #f3f3f3;
-  padding-bottom: 10px;
-  clear: both;
-}
-*/
-
-.dark-gray {
-}
-
-#header {
-  background-color: #1f1f1f;
-}
-
-.flex-box {
-  display: -webkit-flex;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 10px;
-}
-
-.center-content {
-  padding: 2.5% 5%;
-}
-
-ul {
-  list-style-type: none;
 }
 
 img {
@@ -182,46 +67,6 @@ span {
   padding: 5px;
 }
 
-/*
-@media only screen and (max-width: 900px) {
-  .thing1 {
-  }
-}
-*/
-
-.navbar {
-    margin-bottom: 0;
-}
-
-.menu-btn {
-    color: #367bdd;
-}
-
-.modal-label {
-    color: #121212;
-}
-
-form input, form textarea {
-    width: 90%;
-}
-
-.project-thumbnail {
-    max-width: 240px;
-}
-
-
-#footer {
-    height: 30px;
-    background-color: #e7e7e7;
-}
-
-
-.event-link {
-    color: #555555;
-    text-decoration: none;
-}
-
-
 .list-group-item > .place {
   color: #f1f1f1;
   font-weight: 300;
@@ -230,21 +75,23 @@ form input, form textarea {
 }
 
 .list-group-item > .small {
-    /*color: #ADADAD;*/
-    /*color: #FBC43E;*/
-    color: #EBFB37;
+    color: #fdd3e3;
     font-weight: 300;
     padding-top: 0;
     padding-right: 0;
 }
 
 .list-group-item > .small.ev-date {
-    color: #F2FC82;
+    color: #fdd3e3;
 }
 
 .list-group-item > .small.ev-time {
-    color: #FAFECD;
+    color: #fdd3e3;
     font-weight: 400;
+}
+
+.list-group-item:nth-last-child(2) {
+    border-bottom: none;
 }
 
 .list-group-item span:nth-child(n+3) {
@@ -255,10 +102,6 @@ form input, form textarea {
 .list-group-item,
 .list-group-item:first-child,
 .list-group-item:last-child {
-  /*background-color: #fafafa;
-  border-radius: 0;
-  border: 1px solid #f2f2f2;
-  background-color: #121212;*/
   padding-top: 4px;
   padding-bottom: 4px;
   background: rgba(0,0,0,0.92);
@@ -279,13 +122,13 @@ a.list-group-item.no-events:hover {
 }
 
 .no-events-text, .no-events-search {
-    color: #85C6FF;
+    color: #d7d7d7;
     padding-left: 0;
     padding-right: 0;
 }
 
 .no-events-search {
-    color: #C2E2FF;
+    color: #e1e1e1;
 }
 
 .no-show {
@@ -302,12 +145,20 @@ a.list-group-item:last-child:focus {
 .hi-lite:first-child,
 .hi-lite:last-child,
 a.list-group-item:hover {
-  background: rgba(0, 63, 121, 0.98);
+  background: rgba(160,8,64,.98);
 }
 
 .panel-default>.panel-heading {
-    background-color: rgb(0, 120, 228);
+    background-color: #870735;
     height: 56px;
+}
+
+.panel-heading p {
+    margin-top: 9px;
+}
+
+.panel-heading button {
+    margin-top: 5px;
 }
 
 .panel-body {
@@ -319,7 +170,6 @@ a.list-group-item:hover {
 }
 
 .panel-default>.panel-heading p { 
-/*    font-family: 'Dosis', sans-serif;*/
     font-family: 'Merriweather', sans-serif;
     font-style: italic;
     font-size: 16px;
@@ -353,6 +203,8 @@ a.list-group-item:hover {
     -webkit-box-shadow: 3px 3px 2px rgba(4, 4, 4, 0.3);
     -moz-box-shadow: 3px 3px 2px rgba(4, 4, 4, 0.3);
     box-shadow: 3px 3px 2px rgba(4, 4, 4, 0.3);
+    border-bottom: 8px solid #870735;
+    border-radius: 0;
 }
 
 #ko-widget, .wine-event-list {
@@ -360,29 +212,24 @@ a.list-group-item:hover {
 }
 
 .fa-filter {
-    color: rgb(0, 120, 228);
+    color: #870735;
 }
-
 
 #info-window-content {
     max-height: 240px;
 }
 
-a.eventbrite-link {
-/*    text-decoration: none;*/
-}
-
 .btn-primary-outline {
-    color: rgb(0, 120, 228);
+    color: #870735;
     background-color: transparent;
     background-image: none;
-    border-color: rgb(0, 120, 228);
+    border-color: #870735;
     margin-top: 6px;
 }
 
 .btn-primary-outline:hover {
     color: #fff;
-    background-color: rgb(0, 120, 228);
+    background-color: #870735;
 }
 
 .form-control:focus {
@@ -390,14 +237,10 @@ a.eventbrite-link {
     -webkit-box-shadow: none;
 }
 
-
-
-
-
 #ko-widget, #show-hide-panel {
     position: absolute;
     top: 58px;
-    left: 16px;
+    left: 12px;
 }
 
 #show-hide-panel .panel-heading {
@@ -409,7 +252,7 @@ a.eventbrite-link {
 .btn-default:active:hover,
 .btn-default:active:focus {
     color: #fff;
-    background-color: rgb(0, 120, 228);
+    background-color: #870735;
     padding-top: 1px;
     padding-left: 8px;
     padding-right: 8px;
@@ -433,21 +276,19 @@ span.glyphicon.glyphicon-menu-right:focus,
     outline: none;
 }
 
-/*@media screen and (max-width: 767px) {*/
-/*@media screen and (max-width: 767px) {*/
-  .row-offcanvas {
+.row-offcanvas {
     position: relative;
     -webkit-transition: all .25s ease-out;
-         -o-transition: all .25s ease-out;
-            transition: all .25s ease-out;
-  }
+    -o-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+}
 
   .row-offcanvas-left {
     left: 0;
   }
 
 .row-offcanvas-left.active {
-  left: 376px;
+  left: 372px;
 }
 
 .row-offcanvas-left.inactive {
@@ -458,31 +299,14 @@ span.glyphicon.glyphicon-menu-right:focus,
   left:-360px;
 }
 
-.row-offcanvas-left #ko-widget.tab {
-  left:0;
-}
-
-/*
-  .row-offcanvas-left.active {
-    left: 376px;
-  }
-*/
-
-  .panel-toggle {
+.panel-toggle {
     display: block;
-  }    
-/*}*/
-
-/*@media screen and (min-width: 768px) {
-  .panel-toggle {
-    display: none;
-  }
-}*/
+}
 
 .panel-toggle {
     position: absolute;
     top: 58px;
-    left: 16px;
+    left: 12px;
     padding-left: 0;
     padding-top: 0;
     z-index: 1010;
@@ -490,10 +314,4 @@ span.glyphicon.glyphicon-menu-right:focus,
 
 .panel-toggle.inactive {
     display: none;
-}
-
-
-.tab {
-    left: 0;
-    background-color: red;
 }

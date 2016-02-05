@@ -3,16 +3,15 @@
 
 <!--
     Udacity Frontend Web Dev Nano Project 5: Neighborhood Map
-    Shawn Jackson <shontek@gmail.com>
+    Shawn Jackson <hello@shawnj.es>
 //-->
 
 
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        
         <title>__designCPU__ :: Neighborhood Map
 </title>
-        <meta name="viewport" content="width=device-width">
-        
         <!-- FONTS! -->
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700" rel="stylesheet">
         <!--        <link href='https://fonts.googleapis.com/css?family=Dosis:300' rel='stylesheet'>-->
@@ -32,36 +31,15 @@
         <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     </head>
 
-    <body>
-        <!-- Site navigation, built with Bootstrap -->
-        <!--
-        <nav class="navbar navbar-default navbar-fixed-top">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle Nav</span>
-                <span class="fa fa-bars fa-lg menu-btn"></span>
-              </button>
-              <a class="navbar-brand" href="#">__designCPU__</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                <li class="active"><a href="http://www.shawnj.es" target="_blank">.portfolio</a></li>
-                <li><a href="#" data-toggle="modal" data-target="#myModal">.hello</a></li>
-                <li><button type="button" class="btn btn-primary" data-toggle="offcanvas">Toggle nav</button></li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-        -->
-
+    <body class="invisible">
         <div class="container-fluid">
-
-            <div id="panel-row" class="row row-offcanvas row-offcanvas-left active">                
+            
+            <!-- The Wine Events panel, the main info view -->
+            <div id="panel-row" class="row row-offcanvas row-offcanvas-left active">
                 <div id="ko-widget" class="panel panel-default">
                     <!-- Default panel contents -->
                     <div class="panel-heading">
-                        <p>GO FORTH! AND DRINK WINE!<button type="button" class="btn btn-default" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button></p>
+                        <p class="pull-left">GO FORTH! AND DRINK WINE!</p><button type="button" class="btn btn-default pull-right" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span></button>
                     </div>
                     <div class="panel-body">
                         <div class="input-group">
@@ -69,23 +47,21 @@
                           <span class="input-group-addon" id="basic-addon1"><i class="fa fa-filter"></i></span>                        
                         </div>        
                     </div>
-    <!--
-                    <div class="list-group wine-event-list" data-bind="foreach: wineEvents.filter(search, 'name')">
-                      <a href="#" data-bind="click: showMarker, attr: {id: myID}" class="list-group-item">                      
+                    <div class="list-group wine-event-list">                        
+                    <!-- Knockout.js lets us embed the foreach directive in an HTML comment. This
+                        makes it possible to include data-driven and non-data-driven DOM elements
+                        in the same list. List items above or below these Knockout-specific
+                        comments can contain static content -->
+                    <!-- ko foreach: textFilterResults -->
+                      <a href="#" data-bind="click: showMarker, attr: {id: myID}, css: { 'hi-lite': $parent.clickedItemIndex() == index() }" class="list-group-item">
                         <span class="place" data-bind="text: name"></span>
-                        <span class="small" data-bind="text: eventStart"></span>
-                      </a>
-                    </div>
-    -->
-                    <div class="list-group wine-event-list">
-                    <!-- ko foreach: wineEvents.filter(search, 'name') -->
-                      <a href="#" data-bind="click: $data.showMarker, attr: {id: $data.myID}" class="list-group-item">                      
-                        <span class="place" data-bind="text: $data.name"></span>
-                        <span class="small ev-day" data-bind="text: $data.eventDay"></span>
-                        <span class="small ev-date" data-bind="text: $data.eventDate"></span>
-                        <span class="small ev-time" data-bind="text: $data.eventTime"></span>
+                        <span class="small ev-day" data-bind="text: eventDay"></span>
+                        <span class="small ev-date" data-bind="text: eventDate"></span>
+                        <span class="small ev-time" data-bind="text: eventTime"></span>
                       </a>
                     <!-- /ko -->
+                    <!-- We're using this special ko comment embed to add a last item to the Wine
+                        Events panel, for cases where the input text filter returns zero results -->
                       <a href="#" class="list-group-item no-events no-show" data-bind="css: { 'no-show': eventListLength() != 0 }">
                         <span class="no-events-text">No events labeled </span><span class="no-events-search" data-bind="text: search"></span>
                       </a>
@@ -94,54 +70,23 @@
             </div>
 
 
+            <!-- Embed a button to let users open and close the Wine Events panel -->
             <div id="show-hide-btn-cont" class="row row-offcanvas row-offcanvas-left inactive">                
                 <div id="show-hide-panel" class="panel panel-default panel-toggle">
                     <!-- Default panel contents -->
                     <div class="panel-heading">
-                        <p><button type="button" class="btn btn-default" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button></p>
+                        <button type="button" class="btn btn-default" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
                     </div>
                 </div>                
             </div>            
             
             
+            <!-- The main thing, our Google Map -->
             <div id="map-wrapper" class="row map-row">
                 <div id="map-div">
                 </div>
             </div>
         </div>
-
-
-        <!-- 'Contact' modal popup, built with Bootstrap!!! -->
-        <div id="myModal" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Send Me A Message</h4>
-              </div>
-              <div class="modal-body">
-                <div class="modal-body">
-                    <form class="contact" name="contact">
-                        <label class="label modal-label" for="name">Your Name</label><br>
-                        <input type="text" name="name" class="input-xlarge"><br>
-                        <label class="label modal-label" for="email">Your E-mail</label><br>
-                        <input type="email" name="email" class="input-xlarge"><br>
-                        <label class="label modal-label" for="message">Message</label><br>
-                        <textarea name="message" class="input-xlarge"></textarea>
-                    </form>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Send</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
 
         <!-- O Hai JQuery! -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -157,10 +102,19 @@
         
         <!-- We'll apply some custom styling to our Google Map -->
         <script src="js/googleMapStyles.js"></script>
+        
+        <script>
+            function googleSuccess() {
+                //...
+            }
+            function googleOhNo() {
+                alert("Sorry, it looks like we weren't able to load your map.\nPlease try re-loading this page after a few minutes.");
+            }
+        </script>
 
         <!-- Add Google Maps functionality to this site -->
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
-
+        <script async src="http://maps.googleapis.com/maps/api/js?libraries=places&callback=googleSuccess" onerror="googleOhNo()"></script>
+        
         <!-- Our functions that make use of KnockoutJS library -->
         <script src="js/kofun.js"></script>
 
