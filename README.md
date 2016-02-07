@@ -19,5 +19,6 @@ Main.js is the controller script, where we declare global variables and initizli
 * Kofun.js  – Utility functions for handling list, filter, and any other info on the page that may change state.
 * Mapfun.js – Utility functions for rendering elements on a Google Map
 * GoogleMapStyles.js – Array of styles for a Google map, borrowed from the awesome [Snazzy Maps](http://snazzymaps.com/).
+
 ##### External Resources
 The Google Map and the Wine Events panel were styled using [Bootstrap](http://getbootstrap.com/) and [Google Fonts](https://www.google.com/fonts), and icons from [FontAwesome](https://fortawesome.github.io/Font-Awesome/). [Moment.js](http:momentjs.com) provides some really useful functions for formatting dates received from the EventBrite API.
