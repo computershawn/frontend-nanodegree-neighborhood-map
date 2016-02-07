@@ -23,7 +23,11 @@ h6 {
     For proper Google Map rendering, all map containers
     must be full height
 */
-html, body, .container-fluid, .map-row, #map-div, #main {
+html,
+body,
+.container-fluid,
+#map-div,
+#main {
     height: 100%;
 }
 
@@ -31,14 +35,16 @@ html {
     background-color: #870735;
 }
 
+* {
+    font-family: 'Source Sans Pro', sans-serif;    
+}
+
 #map {
 	width:100%;
     height: 100%;
-}
-
-
-* {
-    font-family: 'Source Sans Pro', sans-serif;    
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 body {
@@ -121,7 +127,8 @@ a.list-group-item.no-events:hover {
   padding-bottom: 10px;
 }
 
-.no-events-text, .no-events-search {
+.no-events-text,
+.no-events-search {
     color: #d7d7d7;
     padding-left: 0;
     padding-right: 0;
@@ -165,7 +172,8 @@ a.list-group-item:hover {
     background-color: #080808;
 }
 
-.panel-default>.panel-heading, .panel-body {
+.panel-default>.panel-heading,
+.panel-body {
     color: #fefefe;
 }
 
@@ -176,7 +184,8 @@ a.list-group-item:hover {
     font-weight: 300;
 }
 
-.panel-default, .panel-default>.panel-heading {
+.panel-default,
+.panel-default>.panel-heading {
     border: none;
 }
 
@@ -194,11 +203,11 @@ a.list-group-item:hover {
 }
 
 
-#map-wrapper {
+#content-wrapper {
     z-index: 1000;
 }
 
-#ko-widget {
+#events-panel-widget {
     z-index: 1020;
     -webkit-box-shadow: 3px 3px 2px rgba(4, 4, 4, 0.3);
     -moz-box-shadow: 3px 3px 2px rgba(4, 4, 4, 0.3);
@@ -207,7 +216,8 @@ a.list-group-item:hover {
     border-radius: 0;
 }
 
-#ko-widget, .wine-event-list {
+#events-panel-widget,
+.wine-event-list {
     background: transparent;
 }
 
@@ -237,10 +247,27 @@ a.list-group-item:hover {
     -webkit-box-shadow: none;
 }
 
-#ko-widget, #show-hide-panel {
+#events-panel-widget,
+#show-hide-panel {
     position: absolute;
     top: 58px;
-    left: 12px;
+    left: -372px;
+
+    -webkit-transition: all 180ms ease-out;
+    -o-transition: all 180ms ease-out;
+    transition: all 180ms ease-out;    
+}
+
+#show-hide-panel {
+    left: 0;
+}
+
+#show-hide-panel.inactive {
+    left: -60px;
+}
+
+#events-panel-widget.active {
+    left: 0;
 }
 
 #show-hide-panel .panel-heading {
@@ -260,10 +287,21 @@ a.list-group-item:hover {
     border-width: 0;
 }
 
-span.glyphicon.glyphicon-menu-left:focus,
-span.glyphicon.glyphicon-menu-right:focus,
+span.glyphicon.glyphicon-triangle-left:focus,
+span.glyphicon.glyphicon-list-alt:focus,
 .btn-default:focus {
     outline: none;
+}
+
+span.glyphicon.glyphicon-list-alt {
+    font-size: 16px;
+    padding-top: 2px;
+    margin-top: 2px;
+}
+
+#show-hide-panel button {
+    padding-bottom: 1px;
+    padding-right: 12px;
 }
 
 .btn:active {
@@ -276,29 +314,6 @@ span.glyphicon.glyphicon-menu-right:focus,
     outline: none;
 }
 
-.row-offcanvas {
-    position: relative;
-    -webkit-transition: all .25s ease-out;
-    -o-transition: all .25s ease-out;
-    transition: all .25s ease-out;
-}
-
-  .row-offcanvas-left {
-    left: 0;
-  }
-
-.row-offcanvas-left.active {
-  left: 372px;
-}
-
-.row-offcanvas-left.inactive {
-  left: -72px;    
-}
-
-.row-offcanvas-left #ko-widget {
-  left:-360px;
-}
-
 .panel-toggle {
     display: block;
 }
@@ -306,12 +321,14 @@ span.glyphicon.glyphicon-menu-right:focus,
 .panel-toggle {
     position: absolute;
     top: 58px;
-    left: 12px;
+    left: 0;
     padding-left: 0;
     padding-top: 0;
     z-index: 1010;
 }
 
-.panel-toggle.inactive {
-    display: none;
+@media screen and (min-width: 640px) {
+    .panel-heading button, #show-hide-panel {
+        display: none;
+    }
 }

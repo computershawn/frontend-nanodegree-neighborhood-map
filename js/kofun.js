@@ -45,10 +45,13 @@ function WineEvent(name, link, dateTime, index) {
     // Google Maps marker will react when its corresponding
     // Wine Event list item is clicked in the panel
     self.showMarker = function () {
-        getBouncy(markers[index]);  // mapfun.js
+        getBouncy(markers[index]);
         showInfo(markers[index]);
-        var panelTO = window.setTimeout(togglePanel, 500);  // main.js
-    };    
+        var panDelay = window.setTimeout(pan, 400, markers[index].position);
+        if(panelIsOpen && window.innerWidth < 640) {
+            var panelTO = window.setTimeout(togglePanel, 300);
+        }        
+    };
 }
 
 // Overall viewmodel for wine events panel
@@ -93,7 +96,9 @@ function WineEventsViewModel() {
                 filteredList.push(evt);
             }
             // Show map marker if event title is found. Otherwise, hide marker
-            toggleMarker(ko.unwrap(evt["index"]), found);   // mapfun.js
+            if(markers[ko.unwrap(evt["index"])]) {  // Make sure the marker exists
+                markers[ko.unwrap(evt["index"])].setVisible(found);
+            }
         }
         // Update eventListLength after applying input text filter
         eventListLength(filteredList.length);

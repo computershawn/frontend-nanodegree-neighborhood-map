@@ -52,8 +52,8 @@ function getEventList() {
                 }
                 // Now that we have data for EventBrite events, display the info
                 // in a Knockout.js-based panel. Also, display our Google Map
-                buildKoPanel(); // kofun.js
                 initializeMap(); // mapfun.js
+                buildKoPanel(); // kofun.js
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert("Sorry, it looks like we weren't able to get events from EventBrite.\nPlease try re-loading this page after a few minutes.");

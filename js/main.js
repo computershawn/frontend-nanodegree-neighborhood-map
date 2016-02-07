@@ -33,22 +33,28 @@ $(document).ready(function () {
   $('[data-toggle="offcanvas"]').click(togglePanel);
 });
 
+// Function to open and close the Wine Events panel
 function togglePanel() {
-    $('#panel-row').toggleClass('active');
-    $('#show-hide-btn-cont').toggleClass('inactive');
+    $('#events-panel-widget').toggleClass('active');
+    $('#show-hide-panel').toggleClass('inactive');
     panelIsOpen = !panelIsOpen;
 }
 
-// Function getEventsList is in ebfun.js. After this function
-// runs, our array eventList will contain event names and
-// locations. At this point, from ebfun.js, we call buildKoPanel
-// (from kofun.js) to display the list of events. From ebfun.js,
-// we also call initializeMap (from mapfun.js) to display the
-// event locations on our Google map
-$(window).load(function() {
-    // Query EventBrite API. First, though, make sure Google Maps is present
-    if (typeof google !== 'undefined') {
-        getEventList(); // ebfun.js
+// Check the window width when first opening the app. If window
+// is less than 640 pixels wide, collapse the Wine Events panel
+$(window).ready(function() {
+    if(panelIsOpen && window.innerWidth < 640) {
+        var panelTO = window.setTimeout(togglePanel, 300);
     }
 });
 
+// If Wine Events panel is closed and user's screen width changes
+// from less than to more than 640 pixels, the closed panel and
+// its toggle-open button will be off canvas. Not good. Fix this
+// by automatically toggling the Wine Events panel open when user
+// resizes window from less than to more than 640 pixels wide
+$(window).resize(function() {
+    if(!panelIsOpen&&window.innerWidth >= 640){
+        togglePanel();
+    }
+});

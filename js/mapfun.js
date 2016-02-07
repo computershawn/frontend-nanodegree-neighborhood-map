@@ -11,53 +11,48 @@
 // for the map bounding-box (determined by screen size)
 var map, infoWin, bounds;
 
-// Attach map elements to the DOM
-function attachGoogleMap() {
-    var googleMapDiv = '<div id="map"></div>';
-    $("#map-div").append(googleMapDiv);
-}
-
 
 /*
 Function initializeMap() is called after the app receives lat/lon
 coordinates of EventBrite event locations
 */
 function initializeMap(e) {
-    bounds = new google.maps.LatLngBounds();
+    if (typeof google !== 'undefined') {
 
-    // Attach map divs to DOM before building the map
-    attachGoogleMap();
+        bounds = new google.maps.LatLngBounds();
 
-    infoWin = new google.maps.InfoWindow({
-        content: "",
-        maxWidth: 240,
-        maxHeight: 100
-    });
+        infoWin = new google.maps.InfoWindow({
+            content: "",
+            maxWidth: 240,
+            maxHeight: 100,
+            disableAutoPan: true
+        });
 
-    /* To display map, append googleMapDiv to #map-div.
-    We do this in the above attachGoogleMap function */
-    try {
-        map = new google.maps.Map(document.getElementById('map'));
-    } catch (e) {
-        // If Maps fails for some reason, ask user to try re-loading
-        googleOhNo(); // index.html
+        /* To display map, append googleMapDiv to #map-div.
+        We do this in the above attachGoogleMap function */
+        try {
+            map = new google.maps.Map(document.getElementById('map'));
+        } catch (e) {
+            // If Maps fails for some reason, ask user to try re-loading
+            googleOhNo(); // index.html
+        }
+
+        // No need to use plain-old vanilla styling
+        map.setOptions({styles: mapStyles});
+
+        // Show markers and center content when window gets resized
+        google.maps.event.addDomListener(window, "resize", function () {
+            google.maps.event.trigger(map, "resize");
+            map.fitBounds(bounds);
+        });
+
+        // Fade in 'body' DOM element when everything is ready
+        $("body").removeClass("invisible");
+
+        // After body fade-in, post our location markers onto map
+        initMapCenter(); // Center map to center of all event locations
+        var t = window.setTimeout(postPins, 1000); // Place location pins on map
     }
-    
-    // No need to use plain-old vanilla styling
-    map.setOptions({styles: mapStyles});
-
-    // Show markers and center content when window gets resized
-    google.maps.event.addDomListener(window, "resize", function () {
-        google.maps.event.trigger(map, "resize");
-        map.fitBounds(bounds);
-    });
-
-    // Fade in 'body' DOM element when everything is ready
-    $("body").removeClass("invisible");
-
-    // After body fade-in, post our location markers onto map
-    initMapCenter(); // Center map to center of all event locations
-    var t = window.setTimeout(postPins, 1000); // Place location pins on map
 }
 
 // The 'evt' argument contains information about an upcoming
@@ -85,14 +80,22 @@ function createMapMarker(evt, i) {
         google.maps.event.addListener(m, 'click', function () {
             showInfo(m);
             getBouncy(m);
-            if(panelIsOpen)
-                var panelTO = window.setTimeout(togglePanel, 500);
+            // Wait a bit, then pan map to this marker
+            var panDelay = window.setTimeout(pan, 400, m.position);
+            if(panelIsOpen && window.innerWidth < 640) {
+                var panelTO = window.setTimeout(togglePanel, 300);
+            }
         });
 
         // Add this marker to global array 'markers' so we can
         // access it elsewhere in the application
         markers.push(m);
     }, i * 150);
+}
+
+// Pan our Google Map to a specific location
+function pan(latLon) {
+    map.panTo(latLon);
 }
 
 // Create one map marker 'pin' on the Google map for each
@@ -110,7 +113,7 @@ function postPins() {
 
 function initMapCenter() {
     var evt;
-    for (evt in eventList) {        
+    for (evt in eventList) {
         // Reset the bounds of our map, now that we added a marker
         bounds.extend(new google.maps.LatLng(eventList[evt].eventLoc.lat, eventList[evt].eventLoc.lon));
 
@@ -134,20 +137,6 @@ function formatContent(ind) {
           '</div>' + '</div>';
     
     return str;
-}
-
-// Show or hide markers depending on KnockoutJS text filter in
-// Wine Event info panel
-function toggleMarker(i, showHide) {
-    // Our knockout script loads before the map. Before toggling
-    // markers on/off, have to make sure they exist on the map
-    if(markers[i]) {        
-        if(showHide) {
-            markers[i].setMap(map);
-        } else {
-            markers[i].setMap(null);
-        }
-    }
 }
 
 // Open the InfoWindow

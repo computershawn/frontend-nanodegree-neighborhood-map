@@ -6,15 +6,15 @@
     Shawn Jackson <hello@shawnj.es>
 //-->
 
-
+<html>
     <head>
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         
-        <title>__designCPU__ :: Neighborhood Map
-</title>
+        <title>__designCPU__ :: Neighborhood Map</title>
+        
         <!-- FONTS! -->
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700" rel="stylesheet">
-        <!--        <link href='https://fonts.googleapis.com/css?family=Dosis:300' rel='stylesheet'>-->
         <link href='https://fonts.googleapis.com/css?family=Merriweather:300italic' rel='stylesheet' type='text/css'>        
         
         <!-- Get some FontAwesome Icons -->
@@ -32,59 +32,50 @@
     </head>
 
     <body class="invisible">
-        <div class="container-fluid">
-            
-            <!-- The Wine Events panel, the main info view -->
-            <div id="panel-row" class="row row-offcanvas row-offcanvas-left active">
-                <div id="ko-widget" class="panel panel-default">
-                    <!-- Default panel contents -->
-                    <div class="panel-heading">
-                        <p class="pull-left">GO FORTH! AND DRINK WINE!</p><button type="button" class="btn btn-default pull-right" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span></button>
-                    </div>
-                    <div class="panel-body">
-                        <div class="input-group">
-                          <input type="text" data-bind="value: search, valueUpdate: 'afterkeydown'" class="form-control" placeholder="Filter Your Events..." aria-describedby="basic-addon1">
-                          <span class="input-group-addon" id="basic-addon1"><i class="fa fa-filter"></i></span>                        
-                        </div>        
-                    </div>
-                    <div class="list-group wine-event-list">                        
-                    <!-- Knockout.js lets us embed the foreach directive in an HTML comment. This
-                        makes it possible to include data-driven and non-data-driven DOM elements
-                        in the same list. List items above or below these Knockout-specific
-                        comments can contain static content -->
-                    <!-- ko foreach: textFilterResults -->
-                      <a href="#" data-bind="click: showMarker, attr: {id: myID}, css: { 'hi-lite': $parent.clickedItemIndex() == index() }" class="list-group-item">
-                        <span class="place" data-bind="text: name"></span>
-                        <span class="small ev-day" data-bind="text: eventDay"></span>
-                        <span class="small ev-date" data-bind="text: eventDate"></span>
-                        <span class="small ev-time" data-bind="text: eventTime"></span>
-                      </a>
-                    <!-- /ko -->
-                    <!-- We're using this special ko comment embed to add a last item to the Wine
-                        Events panel, for cases where the input text filter returns zero results -->
-                      <a href="#" class="list-group-item no-events no-show" data-bind="css: { 'no-show': eventListLength() != 0 }">
-                        <span class="no-events-text">No events labeled </span><span class="no-events-search" data-bind="text: search"></span>
-                      </a>
-                    </div>
-                </div>                
+        <div class="container-fluid">            
             </div>
+            <!-- Container for the Wine Event information panel and Google map -->
+            <div id="content-wrapper" class="row map-row">
+                    <div id="events-panel-widget" class="panel panel-default active">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            <p class="pull-left">WINE ALL THE TIME!</p><button type="button" class="btn btn-default pull-right" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span></button>
+                        </div>
+                        <div class="panel-body">
+                            <div class="input-group">
+                              <input type="text" data-bind="value: search, valueUpdate: 'afterkeydown'" class="form-control" placeholder="Filter Your Events..." aria-describedby="basic-addon1">
+                              <span class="input-group-addon" id="basic-addon1"><i class="fa fa-filter"></i></span>                        
+                            </div>        
+                        </div>
+                        <div class="list-group wine-event-list">                        
+                        <!-- Knockout.js lets us embed the foreach directive in an HTML comment. This
+                            makes it possible to include data-driven and non-data-driven DOM elements
+                            in the same list. List items above or below these Knockout-specific
+                            comments can contain static content -->
+                        <!-- ko foreach: textFilterResults -->
+                          <a href="#" data-bind="click: showMarker, attr: {id: myID}, css: { 'hi-lite': $parent.clickedItemIndex() == index() }" class="list-group-item">
+                            <span class="place" data-bind="text: name"></span>
+                            <span class="small ev-day" data-bind="text: eventDay"></span>
+                            <span class="small ev-date" data-bind="text: eventDate"></span>
+                            <span class="small ev-time" data-bind="text: eventTime"></span>
+                          </a>
+                        <!-- /ko -->
+                        <!-- We're using this special ko comment embed to add a last item to the Wine
+                            Events panel, for cases where the input text filter returns zero results -->
+                          <a href="#" class="list-group-item no-events no-show" data-bind="css: { 'no-show': eventListLength() != 0 }">
+                            <span class="no-events-text">No events labeled </span><span class="no-events-search" data-bind="text: search"></span>
+                          </a>
+                        </div>
+                    </div>                  
 
-
-            <!-- Embed a button to let users open and close the Wine Events panel -->
-            <div id="show-hide-btn-cont" class="row row-offcanvas row-offcanvas-left inactive">                
-                <div id="show-hide-panel" class="panel panel-default panel-toggle">
+                <!-- Embed a button to let users open and close the Wine Events panel -->
+                <div id="show-hide-panel" class="panel panel-default panel-toggle inactive">
                     <!-- Default panel contents -->
                     <div class="panel-heading">
-                        <button type="button" class="btn btn-default" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
+                        <button type="button" class="btn btn-default" aria-label="Show Panel" data-toggle="offcanvas"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
                     </div>
-                </div>                
-            </div>            
-            
-            
-            <!-- The main thing, our Google Map -->
-            <div id="map-wrapper" class="row map-row">
-                <div id="map-div">
-                </div>
+                </div>                   
+                    <div id="map"></div>
             </div>
         </div>
 
@@ -104,16 +95,14 @@
         <script src="js/googleMapStyles.js"></script>
         
         <script>
-            function googleSuccess() {
-                //...
-            }
             function googleOhNo() {
                 alert("Sorry, it looks like we weren't able to load your map.\nPlease try re-loading this page after a few minutes.");
             }
         </script>
 
-        <!-- Add Google Maps functionality to this site -->
-        <script async src="http://maps.googleapis.com/maps/api/js?libraries=places&callback=googleSuccess" onerror="googleOhNo()"></script>
+        <!-- Add Google Maps functionality to this site. -->
+        <script async src="http://maps.googleapis.com/maps/api/js?libraries=places&callback=getEventList" onerror="googleOhNo()"></script>
+        <!-- The callback getEventList starts the app by querying the EventBrite API -->
         
         <!-- Our functions that make use of KnockoutJS library -->
         <script src="js/kofun.js"></script>
